@@ -5,8 +5,8 @@ import close from "../assets/icon-close.svg";
 
 const StyledMenuIcon = styled.button`
     background: var(--color-700);
-    width: 56px;
     height: 56px;
+    aspect-ratio: 1;
 
     display: flex;
     justify-content: center;
@@ -14,6 +14,11 @@ const StyledMenuIcon = styled.button`
 
     cursor: pointer;
     border: none;
+
+    @media (min-width: 768px) {
+        height: 72px;
+        aspect-ratio: 1;
+    }
 `;
 
 interface MenuIconProps {

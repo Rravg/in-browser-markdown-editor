@@ -1,36 +1,103 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import Delete from "./Delete";
+import DocumentName from "./DocumentName";
 import MenuIcon from "./MenuIcon";
 import SaveButton from "./SaveButton";
+
+const StyledHeader = styled.header`
+    background: var(--color-800);
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding-right: 8px;
+
+    @media (min-width: 768px) {
+        padding-right: 16px;
+    }
+`;
+
+const Container = styled.div`
+    display: flex;
+    gap: 24px;
+
+    justify-content: space-between;
+    align-items: center;
+`;
+
+const Title = styled.h1`
+    color: var(--color-100);
+    display: none;
+
+    @media (min-width: 1440px) {
+        display: block;
+    }
+`;
 
 export default function Header(): JSX.Element {
     const openNav = () => {
         const nav: HTMLElement | null = document.getElementById("sidenav");
-        if (nav !== null) {
+        const container: HTMLElement | null = document.getElementById("side-container");
+        if (nav !== null && container !== null) {
             nav.style.width = "250px";
+            nav.style.padding = "27px 24px 24px 24px";
+
+            container.style.opacity = "1.0";
         }
 
         const app: HTMLElement | null = document.getElementById("App");
         if (app !== null) {
-            app.style.marginLeft = "250px";
+            app.style.transform = "translateX(250px)";
         }
     };
 
     const closeNav = () => {
         const nav: HTMLElement | null = document.getElementById("sidenav");
-        if (nav !== null) {
-            nav.style.width = "0px";
+        const container: HTMLElement | null = document.getElementById("side-container");
+        if (nav !== null && container !== null) {
+            nav.style.width = "0";
+            nav.style.padding = "0";
+
+            container.style.opacity = "0";
         }
 
         const app: HTMLElement | null = document.getElementById("App");
         if (app !== null) {
-            app.style.marginLeft = "0px";
+            app.style.transform = "translateX(0px)";
+        }
+    };
+
+    const handleSave = () => {
+        console.log("save document");
+    };
+
+    const handleDelete = () => {
+        const modal = document.getElementById("modal");
+        if (modal !== null) {
+            modal.style.display = "block";
+        }
+    };
+
+    window.onclick = function (event: MouseEvent) {
+        const modal = document.getElementById("modal");
+        if (event.target === modal && modal !== null) {
+            modal.style.display = "none";
         }
     };
 
     return (
-        <header>
-            <MenuIcon onOpen={openNav} onClose={closeNav} />
-            <SaveButton />
-        </header>
+        <StyledHeader>
+            <Container>
+                <MenuIcon onOpen={openNav} onClose={closeNav} />
+                <Title className="title">MARKDOWN</Title>
+                <DocumentName name="welcome.md" />
+            </Container>
+
+            <Container>
+                <Delete onClick={handleDelete} />
+                <SaveButton onClick={handleSave} />
+            </Container>
+        </StyledHeader>
     );
 }

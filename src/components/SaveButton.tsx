@@ -1,39 +1,43 @@
 import styled from "styled-components";
+import { Button } from "./General";
 import icon from "../assets/icon-save.svg";
 
-const StyledSaveButton = styled.button`
-    background: var(--orange);
-    width: fit-content;
+const StyledSaveButton = styled(Button)`
+    width: 40px;
     height: 40px;
-    padding: 0px 16px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 0px;
+    
+    @media (min-width: 768px) {
+        width: 152px;
+        padding: 0px 16px;
 
-    border-radius: 4px;
-
-    cursor: pointer;
-    border: none;
-
-    &:hover {
-        background: var(--orange-hover);
+        justify-content: space-between;
     }
 `;
 
-const StyledParagraph = styled.p`
+const Paragraph = styled.p`
     display: none;
     color: var(--color-100);
 
-    @media (min-width: 250px) {
+    @media (min-width: 768px) {
         display: block;
     }
 `;
-export default function SaveButton(): JSX.Element {
+
+interface SaveButtonProps {
+    onClick?: Function;
+}
+
+export default function SaveButton({ onClick }: SaveButtonProps): JSX.Element {
+    const handleClick = () => {
+        if (onClick) onClick();
+    };
+
     return (
-        <StyledSaveButton aria-label="Save">
-            <img src={icon} alt="save changes" />
-            <StyledParagraph className="heading-m">Save Changes</StyledParagraph>
+        <StyledSaveButton aria-label="Save Changes" onClick={handleClick}>
+            <img src={icon} alt="save" />
+            <Paragraph className="heading-m">Save Changes</Paragraph>
         </StyledSaveButton>
     );
 }

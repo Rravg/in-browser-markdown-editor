@@ -1,4 +1,3 @@
 .App {
-    overflow-x: hidden;
+    transition: 0.1s;
 }
-
