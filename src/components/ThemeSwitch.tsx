@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 
 import darkMode from "../assets/icon-dark-mode.svg";
@@ -97,6 +97,35 @@ export default function ThemeSwitch({ setTheme }: ThemeSwitchProps): JSX.Element
         }
     };
 
+    const _setTheme = (themeName: string) => {
+        localStorage.setItem("theme", themeName);
+        document.documentElement.className = themeName;
+    };
+
+    const toggleTheme = () => {
+        if (localStorage.getItem("theme") === "theme-dark") {
+            _setTheme("theme-light");
+        } else {
+            _setTheme("theme-dark");
+        }
+    };
+    useEffect(() => {
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            _setTheme("theme-dark");
+            setIsDarkMode(true);
+        }
+        if (localStorage.getItem("theme") === "theme-dark") {
+            setTheme(darkMode);
+            _setTheme("theme-dark");
+            setIsDarkMode(true);
+        } else {
+            _setTheme("theme-light");
+            setTheme(lightMode);
+            setIsDarkMode(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     useEffect(() => {
         changeTheme();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,6 +133,7 @@ export default function ThemeSwitch({ setTheme }: ThemeSwitchProps): JSX.Element
 
     const handleClick = () => {
         setIsDarkMode((current) => !current);
+        toggleTheme();
     };
     return (
         <StyleThemeSwitch>

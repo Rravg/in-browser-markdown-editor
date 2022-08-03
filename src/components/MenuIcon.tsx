@@ -15,6 +15,10 @@ const StyledMenuIcon = styled.button`
     cursor: pointer;
     border: none;
 
+    &:hover {
+        background: var(--orange);
+    }
+
     @media (min-width: 768px) {
         height: 72px;
         aspect-ratio: 1;

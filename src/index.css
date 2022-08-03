@@ -12,6 +12,7 @@
     font: inherit;
 
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
@@ -70,6 +71,15 @@ svg {
 
 /* Utility Clasess */
 /* Base 16px font-size */
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: initial !important;
+}
+
 .body-m {
     /* Body (M) */
 
@@ -142,7 +152,7 @@ h1,
     line-height: 2.625rem;
 
     /* color: #000000; */
-    color: var(--color-700);
+    color: var(--color-h1);
 }
 
 h2,
@@ -159,7 +169,7 @@ h2,
     /* identical to box height */
 
     /* color: #000000; */
-    color: var(--color-700);
+    color: var(--color-h2);
 }
 
 h3,
@@ -176,7 +186,7 @@ h3,
     /* identical to box height */
 
     /* color: #000000; */
-    color: var(--color-700);
+    color: var(--color-h3);
 }
 
 h4,
@@ -192,7 +202,7 @@ h4,
     line-height: 1.625rem;
 
     /* color: #000000; */
-    color: var(--color-700);
+    color: var(--color-h4);
 }
 
 h5,
@@ -208,7 +218,7 @@ h5,
     line-height: 1.3125rem;
 
     /* color: #000000; */
-    color: var(--color-700);
+    color: var(--color-h5);
 }
 
 h6,
@@ -224,7 +234,7 @@ h6,
     line-height: 1.125rem;
 
     /* color: #000000; */
-    color: var(--orange);
+    color: var(--color-h6);
 }
 
 p,
@@ -242,7 +252,7 @@ li,
     /* identical to box height, or 171% */
 
     /* color: #000000; */
-    color: var(--color-500);
+    color: var(--color-p);
 }
 
 bold,
@@ -272,14 +282,16 @@ bold,
 
 /* Markdown Style */
 
-/* ol {
+ol {
     list-style: decimal inside;
     padding-left: 24px;
+    margin-bottom: 20px;
 }
 
 ul {
     list-style: disc inside;
     padding-left: 24px;
+    margin-bottom: 20px;
 }
 
 ul > li::marker {
@@ -291,8 +303,9 @@ ul > li::marker {
 blockquote {
     padding: 24px 32px 24px 20px;
     border-radius: 4px;
-    background: var(--color-200);
+    background: var(--color-blockquote-bg);
     border-left: 4px solid var(--orange);
+    margin-bottom: 20px;
 }
 
 blockquote > p {
@@ -301,14 +314,16 @@ blockquote > p {
     font-weight: 700;
     font-size: 0.875rem;
     line-height: 1.5rem;
+    margin-bottom: 0px;
 
-    color: var(--color-700);
+    color: var(--color-blockquote);
 }
 
 pre {
-    background: var(--color-200);
+    background: var(--color-blockquote-bg);
     border-radius: 4px;
     padding: 24px;
+    margin-bottom: 20px;
 }
 
 code {
@@ -318,9 +333,58 @@ code {
     font-size: 0.875rem;
     line-height: 1.5rem;
 
-    color: var(--color-700);
+    color: var(--color-code);
 }
 
 a:visited {
-    color: var(--color-700);
-} */
+    color: var(--color-blockquote);
+}
+
+h1 {
+    margin-bottom: 22px;
+}
+
+h2,
+h3,
+h4,
+h5 {
+    margin-bottom: 20px;
+}
+
+h6 {
+    margin-bottom: 21px;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+/* Theme Styles for Markdown  */
+
+.theme-light {
+    --color-h1: var(--color-700);
+    --color-h2: var(--color-700);
+    --color-h3: var(--color-700);
+    --color-h4: var(--color-700);
+    --color-h5: var(--color-700);
+    --color-h6: var(--orange);
+
+    --color-p: var(--color-500);
+    --color-blockquote: var(--color-700);
+    --color-blockquote-bg: var(--color-200);
+    --color-code: var(--color-700);
+}
+
+.theme-dark {
+    --color-h1: var(--color-100);
+    --color-h2: var(--color-100);
+    --color-h3: var(--color-100);
+    --color-h4: var(--color-100);
+    --color-h5: var(--color-100);
+    --color-h6: var(--orange);
+
+    --color-p: var(--color-400);
+    --color-blockquote: var(--color-100);
+    --color-blockquote-bg: var(--color-800);
+    --color-code: var(--color-100);
+}

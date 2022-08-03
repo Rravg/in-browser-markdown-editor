@@ -24,14 +24,21 @@ const Container = styled.div`
 
     justify-content: space-between;
     align-items: center;
+
+    @media (min-width: 768px) {
+    }
 `;
 
 const Title = styled.h1`
     color: var(--color-100);
     display: none;
+    margin-bottom: 0px;
 
     @media (min-width: 1440px) {
         display: block;
+        padding-right: 29px;
+        line-height: 40px;
+        border-right: 1px solid var(--color-600);
     }
 `;
 

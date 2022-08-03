@@ -7,7 +7,7 @@ const StyledSaveButton = styled(Button)`
     height: 40px;
 
     padding: 0px;
-    
+
     @media (min-width: 768px) {
         width: 152px;
         padding: 0px 16px;
@@ -19,6 +19,7 @@ const StyledSaveButton = styled(Button)`
 const Paragraph = styled.p`
     display: none;
     color: var(--color-100);
+    margin-bottom: 0px;
 
     @media (min-width: 768px) {
         display: block;

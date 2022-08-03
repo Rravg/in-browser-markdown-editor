@@ -5,8 +5,9 @@ const lightTheme = {
     body: "var(--color-500)",
 
     middleLineColor: "var(--color-300)",
+    markdownColor: "var(--color-700)",
 
-    h1Color: "var(--color-700)",
+    headerColor: "var(--color-200)",
 };
 
 const darkTheme = {
@@ -16,8 +17,9 @@ const darkTheme = {
     body: "var(--color-400)",
 
     middleLineColor: "var(--color-600)",
+    markdownColor: "var(--color-400)",
 
-    h1Color: "var(--color-100)",
+    headerColor: "var(--color-900)",
 };
 
 export { lightTheme, darkTheme };

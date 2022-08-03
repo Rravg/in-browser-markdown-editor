@@ -11,8 +11,8 @@ const StyledDocument = styled.div`
     cursor: pointer;
     border-radius: 4px;
 
-    &:hover {
-        box-shadow: inset 0 0 6px 2px hsla(222, 9%, 78%, 0.5);
+    &:hover :last-child {
+        color: var(--orange);
     }
 `;
 

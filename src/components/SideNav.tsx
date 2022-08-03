@@ -4,7 +4,6 @@ import { Button } from "./General";
 import data from "../data.json";
 import Document from "./Document";
 import ThemeSwitch from "./ThemeSwitch";
-import { Dispatch } from "react";
 
 const StyledSideNav = styled.div`
     height: 100%;
