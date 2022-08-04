@@ -13,6 +13,8 @@ const StyledHeader = styled.header`
     justify-content: space-between;
     align-items: center;
 
+    width: 100%;
+
     @media (min-width: 768px) {
         padding: 0px 16px;
     }

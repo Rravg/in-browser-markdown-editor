@@ -5,7 +5,6 @@ import icon from "../assets/icon-document.svg";
 const StyledDocument = styled.div`
     display: flex;
     gap: 16px;
-
     align-items: center;
 `;
 

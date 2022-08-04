@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import "./App.css";
 
@@ -22,6 +22,9 @@ function App() {
     const [source, setSource] = useState("");
     const [preview, setPreview] = useState(false);
 
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const previewRef = useRef<HTMLDivElement>(null);
+
     // loads data just for front end
     useEffect(() => {
         setSource(data[1].content);
@@ -42,8 +45,16 @@ function App() {
                         setSource={setSource}
                         preview={preview}
                         setPreview={setPreview}
+                        selfRef={textAreaRef}
+                        targetScrollRef={previewRef}
                     />
-                    <Preview source={source} preview={preview} setPreview={setPreview} />
+                    <Preview
+                        source={source}
+                        preview={preview}
+                        setPreview={setPreview}
+                        selfRef={previewRef}
+                        targetScrollRef={textAreaRef}
+                    />
                 </Container>
             </div>
         </ThemeProvider>

@@ -1,17 +1,37 @@
-import { ChangeEvent } from "react";
-import styled from "styled-components";
+import { ChangeEvent, UIEvent, useRef } from "react";
+import styled, { css } from "styled-components";
 import HeaderMarkdown from "./HeaderMarkdown";
 
-const StyledMarkdown = styled.div`
+interface StyledMarkdownProps {
+    preview: boolean;
+}
+
+const StyledMarkdown = styled.div<StyledMarkdownProps>`
     flex: 1;
     background: ${(props) => props.theme.mainBackground};
     border-right: 1px solid ${(props) => props.theme.middleLineColor};
     transition: display 0.3s;
+
+    overflow-y: clip;
+
+    padding-bottom: 20px;
+
+    ${(props) => {
+        if (props.preview) {
+            return css`
+                display: none;
+            `;
+        } else {
+            return css`
+                display: block;
+            `;
+        }
+    }}
 `;
 
 const TextArea = styled.textarea`
     width: 100%;
-    height: 100%;
+    height: calc(100% - 98px);
     border: none;
     outline: none;
     background: ${(props) => props.theme.mainBackground};
@@ -21,7 +41,14 @@ const TextArea = styled.textarea`
 
     padding: 16px 16px;
 
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
     @media (min-width: 768px) {
+        height: calc(100% - 114px);
         padding: 9px 16px;
     }
 `;
@@ -32,6 +59,9 @@ interface MarkdownProps {
 
     preview: boolean;
     setPreview: Function;
+
+    selfRef: React.RefObject<any>;
+    targetScrollRef: React.RefObject<any>;
 }
 
 export default function Markdown({
@@ -39,15 +69,31 @@ export default function Markdown({
     setSource,
     preview,
     setPreview,
+    selfRef,
+    targetScrollRef,
 }: MarkdownProps): JSX.Element {
+    const MarkdownRef = useRef<HTMLDivElement>(null);
+
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setSource(e.currentTarget.value);
     };
 
+    const handleScroll = (e: UIEvent<HTMLTextAreaElement>) => {
+        e.preventDefault();
+
+        targetScrollRef.current.scrollTop = e.currentTarget.scrollTop;
+    };
+
     return (
-        <StyledMarkdown id="markdown">
+        <StyledMarkdown id="markdown" ref={MarkdownRef} preview={preview}>
             <HeaderMarkdown preview={preview} setPreview={setPreview} />
-            <TextArea className="markdown" value={source} onChange={handleChange} />
+            <TextArea
+                className="markdown"
+                value={source}
+                onChange={handleChange}
+                onScroll={handleScroll}
+                ref={selfRef}
+            />
         </StyledMarkdown>
     );
 }

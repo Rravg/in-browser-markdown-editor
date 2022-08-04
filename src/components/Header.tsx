@@ -13,6 +13,9 @@ const StyledHeader = styled.header`
 
     padding-right: 8px;
 
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
     @media (min-width: 768px) {
         padding-right: 16px;
     }
