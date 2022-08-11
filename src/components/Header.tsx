@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useAuth } from "./AuthProvider";
 import Delete from "./Delete";
 import DocumentName from "./DocumentName";
 import MenuIcon from "./MenuIcon";
@@ -46,6 +47,8 @@ const Title = styled.h1`
 `;
 
 export default function Header(): JSX.Element {
+    let auth = useAuth();
+
     const openNav = () => {
         const nav: HTMLElement | null = document.getElementById("sidenav");
         const container: HTMLElement | null = document.getElementById("side-container");
@@ -95,18 +98,21 @@ export default function Header(): JSX.Element {
             modal.style.display = "none";
         }
     };
-
     return (
         <StyledHeader>
             <Container>
                 <MenuIcon onOpen={openNav} onClose={closeNav} />
                 <Title className="title">MARKDOWN</Title>
-                <DocumentName name="welcome.md" />
+                {auth.user && <DocumentName name="welcome.md" />}
             </Container>
 
             <Container>
-                <Delete onClick={handleDelete} />
-                <SaveButton onClick={handleSave} />
+                {auth.user && (
+                    <>
+                        <Delete onClick={handleDelete} />
+                        <SaveButton onClick={handleSave} />
+                    </>
+                )}
             </Container>
         </StyledHeader>
     );

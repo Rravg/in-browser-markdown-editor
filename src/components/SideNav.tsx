@@ -4,6 +4,9 @@ import { Button } from "./General";
 import data from "../data.json";
 import Document from "./Document";
 import ThemeSwitch from "./ThemeSwitch";
+import { useAuth } from "./AuthProvider";
+import { useNavigate } from "react-router-dom";
+import UserService from "../services/UserService";
 
 const StyledSideNav = styled.div`
     height: 100%;
@@ -23,6 +26,10 @@ const StyledSideNav = styled.div`
 const Container = styled.div`
     transition: opacity 0.1s;
     opacity: 0;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
 `;
 
 const Title = styled.h1`
@@ -49,8 +56,24 @@ const NewButton = styled(Button)`
 `;
 
 const SwithContainer = styled.div`
-    position: absolute;
-    bottom: 24px;
+    /* position: absolute;
+    bottom: 24px; */
+`;
+
+const LogoutButton = styled.button`
+    cursor: pointer;
+    margin-bottom: 32px;
+    width: 100%;
+    padding: 8px 6px;
+    border-radius: 4px;
+    background-color: transparent;
+    border: 1px solid var(--color-200);
+    color: var(--color-200);
+    outline: none;
+
+    &:hover {
+        background-color: var(--orange);
+    }
 `;
 
 interface SideNavProps {
@@ -58,6 +81,9 @@ interface SideNavProps {
 }
 
 export default function SideNav({ setTheme }: SideNavProps): JSX.Element {
+    let auth = useAuth();
+    let navigate = useNavigate();
+
     const handleClick = () => {
         console.log();
 
@@ -66,25 +92,46 @@ export default function SideNav({ setTheme }: SideNavProps): JSX.Element {
         });
     };
 
+    const handleLogout = () => {
+        UserService.logout()
+            .then((response) => {
+                auth.logout(() => {
+                    navigate("/login");
+                });
+            })
+            .catch((e) => console.error(e));
+    };
+
     return (
         <StyledSideNav id="sidenav">
             <Container id="side-container">
-                <Title className="title">MARKDOWN</Title>
-                <SubTitle className="heading-s">MY DOCUMENTS</SubTitle>
-                <NewButton className="heading-m" onClick={handleClick}>
-                    + New Document
-                </NewButton>
-                {data.map((document, index) => {
-                    return (
-                        <Document
-                            key={index}
-                            date={document.createdAt}
-                            name={document.name}
-                            onClick={handleClick}
-                        />
-                    );
-                })}
-                <SwithContainer style={{ position: "absolute", bottom: "24px" }}>
+                <div style={{ flex: "1" }}>
+                    <Title className="title">MARKDOWN</Title>
+                    {auth.user && (
+                        <>
+                            <SubTitle className="heading-s">MY DOCUMENTS</SubTitle>
+                            <NewButton className="heading-m" onClick={handleClick}>
+                                + New Document
+                            </NewButton>
+                            {data.map((document, index) => {
+                                return (
+                                    <Document
+                                        key={index}
+                                        date={document.createdAt}
+                                        name={document.name}
+                                        onClick={handleClick}
+                                    />
+                                );
+                            })}
+                        </>
+                    )}
+                </div>
+                <SwithContainer>
+                    {auth.user && (
+                        <LogoutButton className="heading-m" onClick={handleLogout}>
+                            Logout
+                        </LogoutButton>
+                    )}
                     <ThemeSwitch setTheme={setTheme} />
                 </SwithContainer>
             </Container>

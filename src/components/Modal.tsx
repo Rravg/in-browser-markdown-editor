@@ -16,7 +16,7 @@ const StyledModal = styled.div`
 const ModalContainer = styled.div`
     background: ${(props) => props.theme.background};
     width: 90%;
-    height: 218px;
+    /* height: 218px; */
     max-width: 343px;
     padding: 24px;
     border-radius: 4px;
