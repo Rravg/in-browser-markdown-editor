@@ -13,7 +13,7 @@ export default class UserService {
         return axios.get(LOGOUT_URL);
     }
 
-    public static signup(user: User) {
-        return axios.post(SIGNUP_URL, user);
+    public static signup(user: User, date: string) {
+        return axios.post(SIGNUP_URL, user, { params: { date: date } });
     }
 }

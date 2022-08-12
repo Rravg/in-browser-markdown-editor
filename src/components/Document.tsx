@@ -24,6 +24,7 @@ const Date = styled.p`
 
 const Name = styled.p`
     display: block;
+    margin-bottom: 0px;
     color: var(--color-100);
 `;
 

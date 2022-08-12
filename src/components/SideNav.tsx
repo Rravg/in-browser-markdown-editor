@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { Button } from "./General";
 
-import data from "../data.json";
 import Document from "./Document";
 import ThemeSwitch from "./ThemeSwitch";
 import { useAuth } from "./AuthProvider";
 import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
+import DocumentService from "../services/DocumentService";
+import { useEffect, useState } from "react";
 
 const StyledSideNav = styled.div`
     height: 100%;
@@ -80,26 +81,59 @@ interface SideNavProps {
     setTheme: Function;
 }
 
+type document = {
+    document_name: string;
+    created_at: string;
+};
+
 export default function SideNav({ setTheme }: SideNavProps): JSX.Element {
+    const [data, setData] = useState<document[]>([]);
+
     let auth = useAuth();
     let navigate = useNavigate();
 
-    const handleClick = () => {
-        console.log();
+    function getDate(now: Date): string {
+        let date: string = "";
+        const year = now.getFullYear();
+        let day = now.getDay().toString();
+        if (day.length === 1) day = "0".concat(day);
 
-        data.forEach((element) => {
-            console.log(element);
+        let month = now.toLocaleString("default", { month: "long" });
+        month = month.charAt(0).toUpperCase() + month.slice(1);
+
+        date = `${day} ${month} ${year}`;
+        return date;
+    }
+
+    const getDocuments = async () => {
+        let response = await DocumentService.GetDocuments(auth.user);
+        setData((docs) => {
+            return response.data.documents;
         });
     };
 
-    const handleLogout = () => {
-        UserService.logout()
-            .then((response) => {
-                auth.logout(() => {
-                    navigate("/login");
-                });
-            })
-            .catch((e) => console.error(e));
+    useEffect(() => {
+        if (auth.user) {
+            getDocuments();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [auth.user]);
+
+    const handleClick = () => {
+        if (auth.user) {
+            getDocuments();
+        }
+        console.log(getDate(new Date()));
+        console.log(data);
+    };
+
+    const handleLogout = async () => {
+        try {
+            await UserService.logout();
+            auth.logout(() => navigate("/login"));
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -117,8 +151,8 @@ export default function SideNav({ setTheme }: SideNavProps): JSX.Element {
                                 return (
                                     <Document
                                         key={index}
-                                        date={document.createdAt}
-                                        name={document.name}
+                                        date={document.created_at}
+                                        name={document.document_name}
                                         onClick={handleClick}
                                     />
                                 );

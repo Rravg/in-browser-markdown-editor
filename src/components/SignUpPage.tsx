@@ -133,7 +133,7 @@ function SignUpForm(): JSX.Element {
             };
 
             try {
-                let response = await UserService.signup(user);
+                let response = await UserService.signup(user, getDate(new Date()));
                 if (response.data.isAuth) {
                     auth.login(user.username, () => navigate("/"));
                 }
@@ -147,6 +147,19 @@ function SignUpForm(): JSX.Element {
             setShowPasswordError(true);
         }
     };
+
+    function getDate(now: Date): string {
+        let date: string = "";
+        const year = now.getFullYear();
+        let day = now.getDay().toString();
+        if (day.length === 1) day = "0".concat(day);
+
+        let month = now.toLocaleString("default", { month: "long" });
+        month = month.charAt(0).toUpperCase() + month.slice(1);
+
+        date = `${day} ${month} ${year}`;
+        return date;
+    }
 
     return (
         <form onSubmit={handleSubmit}>
