@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import DocumentService from "../services/DocumentService";
+import { useAuth } from "./AuthProvider";
 import { Button } from "./General";
 
 const StyledModal = styled.div`
@@ -42,16 +44,49 @@ const Paragraph = styled.p`
     margin: 16px 0px;
 `;
 
-export default function Modal(): JSX.Element {
+interface ModalProps {
+    currentDocument: string;
+    setCurrentDocument: Function;
+    setData: Function;
+}
+
+export default function Modal({
+    currentDocument,
+    setCurrentDocument,
+    setData,
+}: ModalProps): JSX.Element {
+    const auth = useAuth();
+
+    const getDocuments = async () => {
+        let response = await DocumentService.GetDocuments(auth.user);
+        setData((docs: document) => {
+            return response.data.documents;
+        });
+    };
+
+    const handleClick = async () => {
+        if (currentDocument !== "") {
+            await DocumentService.DeleteDocument(currentDocument, auth.user);
+            getDocuments();
+            const modal = document.getElementById("modal");
+            if (modal !== null) {
+                modal.style.display = "none";
+            }
+            setCurrentDocument("");
+        }
+    };
+
     return (
         <StyledModal id="modal">
             <ModalContainer>
                 <Title className="preview-h4">Delete this document?</Title>
                 <Paragraph className="preview-paragraph">
-                    Are you sure you want to delete the ‘welcome.md’ document and its contents? This
-                    action cannot be reversed.
+                    Are you sure you want to delete the '{currentDocument}' document and its
+                    contents? This action cannot be reversed.
                 </Paragraph>
-                <ModalButton className="heading-m">Confirm & Delete</ModalButton>
+                <ModalButton className="heading-m" onClick={handleClick}>
+                    Confirm & Delete
+                </ModalButton>
             </ModalContainer>
         </StyledModal>
     );

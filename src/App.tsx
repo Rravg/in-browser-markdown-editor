@@ -10,11 +10,12 @@ import SideNav from "./components/SideNav";
 
 import { lightTheme, darkTheme } from "./styles/Themes";
 
-import data from "./data.json";
+import testData from "./data.json";
 import { Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import SignUpPage from "./components/SignUpPage";
 import AuthProvider, { useAuth } from "./components/AuthProvider";
+import { useLocalStorage } from "usehooks-ts";
 
 const Container = styled.div`
     display: flex;
@@ -25,13 +26,15 @@ function App() {
     const [theme, setTheme] = useState(lightTheme);
     const [source, setSource] = useState("");
     const [preview, setPreview] = useState(false);
+    const [currentDocument, setCurrentDocument] = useLocalStorage("currentDocument", "");
+    const [data, setData] = useState<document[]>([]);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const previewRef = useRef<HTMLDivElement>(null);
 
     // loads data just for front end
     useEffect(() => {
-        setSource(data[1].content);
+        setSource(testData[1].content);
         if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
             setTheme(darkTheme);
         }
@@ -40,13 +43,34 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <AuthProvider>
-                <Modal />
-                <SideNav setTheme={setTheme} />
+                <Modal
+                    currentDocument={currentDocument}
+                    setData={setData}
+                    setCurrentDocument={setCurrentDocument}
+                />
+                <SideNav
+                    setTheme={setTheme}
+                    currentDocument={currentDocument}
+                    setCurrentDocument={setCurrentDocument}
+                    data={data}
+                    setData={setData}
+                />
                 <div className="App" id="App">
-                    <Header />
+                    <Header
+                        currentDocument={currentDocument}
+                        setCurrentDocument={setCurrentDocument}
+                    />
                     <Routes>
                         <Route path="/login" element={<LoginPage />} />
-                        <Route path="/signup" element={<SignUpPage />} />
+                        <Route
+                            path="/signup"
+                            element={
+                                <SignUpPage
+                                    currentDocument={currentDocument}
+                                    setCurrentDocument={setCurrentDocument}
+                                />
+                            }
+                        />
                         <Route
                             path="/"
                             element={

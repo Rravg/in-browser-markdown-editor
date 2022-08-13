@@ -45,12 +45,20 @@ const StyledLink = styled(Link)`
     }
 `;
 
-export default function SignUpPage(): JSX.Element {
+interface Props {
+    currentDocument: string;
+    setCurrentDocument: Function;
+}
+
+export default function SignUpPage({ currentDocument, setCurrentDocument }: Props): JSX.Element {
     return (
         <StyledSignUpPage>
             <SignUpContainer>
                 <Title className="preview-h4">Sign Up</Title>
-                <SignUpForm />
+                <SignUpForm
+                    currentDocument={currentDocument}
+                    setCurrentDocument={setCurrentDocument}
+                />
                 <Paragraph>
                     Have an account?
                     <StyledLink to="/login">Log In</StyledLink>
@@ -101,7 +109,7 @@ const ErrorText = styled.p`
     color: red;
 `;
 
-function SignUpForm(): JSX.Element {
+function SignUpForm({ currentDocument, setCurrentDocument }: Props): JSX.Element {
     const [showUsernameError, setShowUsernameError] = useState(false);
     const [showPasswordError, setShowPasswordError] = useState(false);
 
@@ -136,6 +144,7 @@ function SignUpForm(): JSX.Element {
                 let response = await UserService.signup(user, getDate(new Date()));
                 if (response.data.isAuth) {
                     auth.login(user.username, () => navigate("/"));
+                    setCurrentDocument("welcome.md");
                 }
             } catch (error) {
                 // user already exists

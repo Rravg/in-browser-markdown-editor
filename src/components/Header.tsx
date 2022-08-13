@@ -46,7 +46,12 @@ const Title = styled.h1`
     }
 `;
 
-export default function Header(): JSX.Element {
+interface HeaderProps {
+    currentDocument: string;
+    setCurrentDocument: Function;
+}
+
+export default function Header({ currentDocument }: HeaderProps): JSX.Element {
     let auth = useAuth();
 
     const openNav = () => {
@@ -103,7 +108,7 @@ export default function Header(): JSX.Element {
             <Container>
                 <MenuIcon onOpen={openNav} onClose={closeNav} />
                 <Title className="title">MARKDOWN</Title>
-                {auth.user && <DocumentName name="welcome.md" />}
+                {auth.user && <DocumentName name={currentDocument} />}
             </Container>
 
             <Container>

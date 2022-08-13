@@ -5,4 +5,9 @@ declare global {
         username: string;
         password: string;
     }
+
+    type document = {
+        document_name: string;
+        created_at: string;
+    };
 }

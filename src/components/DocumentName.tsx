@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import icon from "../assets/icon-document.svg";
 
@@ -37,6 +37,10 @@ interface DocumentProps {
 
 export default function DocumentName({ name }: DocumentProps): JSX.Element {
     const [inputValue, setInputValue] = useState(name);
+
+    useEffect(() => {
+        setInputValue(name);
+    }, [name]);
 
     const handleChange = (e: FormEvent<HTMLInputElement>) => {
         setInputValue(e.currentTarget.value);

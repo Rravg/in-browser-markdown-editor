@@ -32,11 +32,21 @@ interface DocumentProp {
     date: string;
     name: string;
     onClick?: Function;
+
+    currentDocument: string;
+    setCurrentDocument: Function;
 }
 
-export default function Document({ date, name, onClick }: DocumentProp): JSX.Element {
+export default function Document({
+    date,
+    name,
+    onClick,
+    currentDocument,
+    setCurrentDocument,
+}: DocumentProp): JSX.Element {
     const handleClick = () => {
-        if (onClick) onClick();
+        // use own implementation
+        setCurrentDocument(name);
     };
 
     return (

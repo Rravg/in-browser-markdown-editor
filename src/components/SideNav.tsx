@@ -7,7 +7,7 @@ import { useAuth } from "./AuthProvider";
 import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import DocumentService from "../services/DocumentService";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const StyledSideNav = styled.div`
     height: 100%;
@@ -79,16 +79,20 @@ const LogoutButton = styled.button`
 
 interface SideNavProps {
     setTheme: Function;
+    currentDocument: string;
+    setCurrentDocument: Function;
+
+    data: document[];
+    setData: Function;
 }
 
-type document = {
-    document_name: string;
-    created_at: string;
-};
-
-export default function SideNav({ setTheme }: SideNavProps): JSX.Element {
-    const [data, setData] = useState<document[]>([]);
-
+export default function SideNav({
+    setTheme,
+    currentDocument,
+    setCurrentDocument,
+    data,
+    setData,
+}: SideNavProps): JSX.Element {
     let auth = useAuth();
     let navigate = useNavigate();
 
@@ -107,7 +111,7 @@ export default function SideNav({ setTheme }: SideNavProps): JSX.Element {
 
     const getDocuments = async () => {
         let response = await DocumentService.GetDocuments(auth.user);
-        setData((docs) => {
+        setData((docs: document) => {
             return response.data.documents;
         });
     };
@@ -119,12 +123,12 @@ export default function SideNav({ setTheme }: SideNavProps): JSX.Element {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [auth.user]);
 
-    const handleClick = () => {
+    const handleNewDocument = async () => {
         if (auth.user) {
             getDocuments();
         }
-        console.log(getDate(new Date()));
-        console.log(data);
+        await DocumentService.CreateDocument(getDate(new Date()), auth.user);
+        getDocuments();
     };
 
     const handleLogout = async () => {
@@ -144,19 +148,23 @@ export default function SideNav({ setTheme }: SideNavProps): JSX.Element {
                     {auth.user && (
                         <>
                             <SubTitle className="heading-s">MY DOCUMENTS</SubTitle>
-                            <NewButton className="heading-m" onClick={handleClick}>
+                            <NewButton className="heading-m" onClick={handleNewDocument}>
                                 + New Document
                             </NewButton>
-                            {data.map((document, index) => {
-                                return (
-                                    <Document
-                                        key={index}
-                                        date={document.created_at}
-                                        name={document.document_name}
-                                        onClick={handleClick}
-                                    />
-                                );
-                            })}
+                            {data
+                                .slice(0)
+                                .reverse()
+                                .map((document, index) => {
+                                    return (
+                                        <Document
+                                            key={index}
+                                            date={document.created_at}
+                                            name={document.document_name}
+                                            currentDocument={currentDocument}
+                                            setCurrentDocument={setCurrentDocument}
+                                        />
+                                    );
+                                })}
                         </>
                     )}
                 </div>
