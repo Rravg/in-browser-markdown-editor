@@ -110,18 +110,17 @@ export default function ThemeSwitch({ setTheme }: ThemeSwitchProps): JSX.Element
         }
     };
     useEffect(() => {
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-            _setTheme("theme-dark");
-            setIsDarkMode(true);
-        }
         if (localStorage.getItem("theme") === "theme-dark") {
             setTheme(darkMode);
             _setTheme("theme-dark");
             setIsDarkMode(true);
-        } else {
+        } else if (localStorage.getItem("theme") === "theme-light") {
             _setTheme("theme-light");
             setTheme(lightMode);
             setIsDarkMode(false);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            _setTheme("theme-dark");
+            setIsDarkMode(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

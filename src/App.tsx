@@ -10,7 +10,6 @@ import SideNav from "./components/SideNav";
 
 import { lightTheme, darkTheme } from "./styles/Themes";
 
-import testData from "./data.json";
 import { Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import SignUpPage from "./components/SignUpPage";
@@ -24,18 +23,22 @@ const Container = styled.div`
 
 function App() {
     const [theme, setTheme] = useState(lightTheme);
-    const [source, setSource] = useState("");
     const [preview, setPreview] = useState(false);
     const [currentDocument, setCurrentDocument] = useLocalStorage("currentDocument", "");
+    const [source, setSource] = useState("");
     const [data, setData] = useState<document[]>([]);
+    const [inputValue, setInputValue] = useState(currentDocument);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const previewRef = useRef<HTMLDivElement>(null);
 
     // loads data just for front end
     useEffect(() => {
-        setSource(testData[1].content);
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        if (localStorage.getItem("theme") === "theme-dark") {
+            setTheme(darkTheme);
+        } else if (localStorage.getItem("theme") === "theme-light") {
+            setTheme(lightTheme);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
             setTheme(darkTheme);
         }
     }, []);
@@ -47,6 +50,7 @@ function App() {
                     currentDocument={currentDocument}
                     setData={setData}
                     setCurrentDocument={setCurrentDocument}
+                    setSource={setSource}
                 />
                 <SideNav
                     setTheme={setTheme}
@@ -54,11 +58,17 @@ function App() {
                     setCurrentDocument={setCurrentDocument}
                     data={data}
                     setData={setData}
+                    source={source}
+                    setSource={setSource}
                 />
                 <div className="App" id="App">
                     <Header
                         currentDocument={currentDocument}
                         setCurrentDocument={setCurrentDocument}
+                        source={source}
+                        setData={setData}
+                        inputValue={inputValue}
+                        setInputValue={setInputValue}
                     />
                     <Routes>
                         <Route path="/login" element={<LoginPage />} />

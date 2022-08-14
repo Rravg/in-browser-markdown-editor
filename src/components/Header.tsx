@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import DocumentService from "../services/DocumentService";
 import { useAuth } from "./AuthProvider";
 import Delete from "./Delete";
 import DocumentName from "./DocumentName";
@@ -49,10 +50,30 @@ const Title = styled.h1`
 interface HeaderProps {
     currentDocument: string;
     setCurrentDocument: Function;
+
+    source: string;
+    setData: Function;
+
+    inputValue: string;
+    setInputValue: Function;
 }
 
-export default function Header({ currentDocument }: HeaderProps): JSX.Element {
+export default function Header({
+    currentDocument,
+    setCurrentDocument,
+    source,
+    setData,
+    inputValue,
+    setInputValue,
+}: HeaderProps): JSX.Element {
     let auth = useAuth();
+
+    const getDocuments = async () => {
+        let response = await DocumentService.GetDocuments(auth.user);
+        setData((docs: document) => {
+            return response.data.documents;
+        });
+    };
 
     const openNav = () => {
         const nav: HTMLElement | null = document.getElementById("sidenav");
@@ -86,8 +107,10 @@ export default function Header({ currentDocument }: HeaderProps): JSX.Element {
         }
     };
 
-    const handleSave = () => {
-        console.log("save document");
+    const handleSave = async () => {
+        await DocumentService.SaveDocument(inputValue, currentDocument, source, auth.user);
+        setCurrentDocument(inputValue);
+        getDocuments();
     };
 
     const handleDelete = () => {
@@ -108,7 +131,13 @@ export default function Header({ currentDocument }: HeaderProps): JSX.Element {
             <Container>
                 <MenuIcon onOpen={openNav} onClose={closeNav} />
                 <Title className="title">MARKDOWN</Title>
-                {auth.user && <DocumentName name={currentDocument} />}
+                {auth.user && (
+                    <DocumentName
+                        name={currentDocument}
+                        inputValue={inputValue}
+                        setInputValue={setInputValue}
+                    />
+                )}
             </Container>
 
             <Container>

@@ -1,5 +1,8 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 import icon from "../assets/icon-document.svg";
+import DocumentService from "../services/DocumentService";
+import { useAuth } from "./AuthProvider";
 
 const StyledDocument = styled.div`
     display: flex;
@@ -35,6 +38,7 @@ interface DocumentProp {
 
     currentDocument: string;
     setCurrentDocument: Function;
+    setSource: Function;
 }
 
 export default function Document({
@@ -43,8 +47,21 @@ export default function Document({
     onClick,
     currentDocument,
     setCurrentDocument,
+    setSource,
 }: DocumentProp): JSX.Element {
-    const handleClick = () => {
+    let auth = useAuth();
+
+    const updateDocument = async (): Promise<void> => {
+        let response = await DocumentService.GetSelectedDocument(currentDocument, auth.user);
+        setSource(response.data.document.document_body);
+    };
+
+    useEffect(() => {
+        updateDocument();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentDocument]);
+
+    const handleClick = async () => {
         // use own implementation
         setCurrentDocument(name);
     };
@@ -54,7 +71,7 @@ export default function Document({
             <img src={icon} alt="" />
             <div>
                 <Date className="body-m">{date}</Date>
-                <Name className="heading-m">{name}</Name>
+                <Name className="heading-m">{name}.md</Name>
             </div>
         </StyledDocument>
     );

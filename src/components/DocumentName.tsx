@@ -33,16 +33,23 @@ const Name = styled.input`
 
 interface DocumentProps {
     name: string;
+    inputValue: string;
+    setInputValue: Function;
 }
 
-export default function DocumentName({ name }: DocumentProps): JSX.Element {
-    const [inputValue, setInputValue] = useState(name);
-
+export default function DocumentName({
+    name,
+    inputValue,
+    setInputValue,
+}: DocumentProps): JSX.Element {
     useEffect(() => {
         setInputValue(name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [name]);
 
     const handleChange = (e: FormEvent<HTMLInputElement>) => {
+        console.log(name);
+        console.log(inputValue);
         setInputValue(e.currentTarget.value);
     };
     return (
@@ -59,6 +66,7 @@ export default function DocumentName({ name }: DocumentProps): JSX.Element {
                     name="name"
                     id="name"
                     className="heading-m"
+                    placeholder="No selected document"
                 />
             </div>
         </StyledDocument>

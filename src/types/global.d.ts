@@ -10,4 +10,9 @@ declare global {
         document_name: string;
         created_at: string;
     };
+
+    type currentDocument = {
+        name: string;
+        body: string;
+    };
 }

@@ -48,12 +48,14 @@ interface ModalProps {
     currentDocument: string;
     setCurrentDocument: Function;
     setData: Function;
+    setSource: Function;
 }
 
 export default function Modal({
     currentDocument,
     setCurrentDocument,
     setData,
+    setSource,
 }: ModalProps): JSX.Element {
     const auth = useAuth();
 
@@ -68,11 +70,12 @@ export default function Modal({
         if (currentDocument !== "") {
             await DocumentService.DeleteDocument(currentDocument, auth.user);
             getDocuments();
+            setSource("");
+            setCurrentDocument("");
             const modal = document.getElementById("modal");
             if (modal !== null) {
                 modal.style.display = "none";
             }
-            setCurrentDocument("");
         }
     };
 

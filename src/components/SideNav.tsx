@@ -7,7 +7,8 @@ import { useAuth } from "./AuthProvider";
 import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import DocumentService from "../services/DocumentService";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useIsFirstRender } from "usehooks-ts";
 
 const StyledSideNav = styled.div`
     height: 100%;
@@ -84,6 +85,9 @@ interface SideNavProps {
 
     data: document[];
     setData: Function;
+
+    source: string;
+    setSource: Function;
 }
 
 export default function SideNav({
@@ -92,9 +96,13 @@ export default function SideNav({
     setCurrentDocument,
     data,
     setData,
+    source,
+    setSource,
 }: SideNavProps): JSX.Element {
     let auth = useAuth();
     let navigate = useNavigate();
+
+    const isFirst = useIsFirstRender();
 
     function getDate(now: Date): string {
         let date: string = "";
@@ -108,6 +116,21 @@ export default function SideNav({
         date = `${day} ${month} ${year}`;
         return date;
     }
+
+    const setNewDocument = async () => {
+        console.log(isFirst);
+        if (!isFirst) {
+            setCurrentDocument(() => {
+                let name = data[data.length - 1].document_name;
+                return name;
+            });
+        }
+    };
+
+    useEffect(() => {
+        setNewDocument();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data]);
 
     const getDocuments = async () => {
         let response = await DocumentService.GetDocuments(auth.user);
@@ -124,9 +147,6 @@ export default function SideNav({
     }, [auth.user]);
 
     const handleNewDocument = async () => {
-        if (auth.user) {
-            getDocuments();
-        }
         await DocumentService.CreateDocument(getDate(new Date()), auth.user);
         getDocuments();
     };
@@ -162,6 +182,7 @@ export default function SideNav({
                                             name={document.document_name}
                                             currentDocument={currentDocument}
                                             setCurrentDocument={setCurrentDocument}
+                                            setSource={setSource}
                                         />
                                     );
                                 })}
