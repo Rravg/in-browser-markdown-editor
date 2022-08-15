@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useClickAnyWhere } from "usehooks-ts";
+import DocumentService from "../services/DocumentService";
 import UserService from "../services/UserService";
 import { useAuth } from "./AuthProvider";
 import { Button } from "./General";
@@ -48,9 +49,15 @@ const StyledLink = styled(Link)`
 interface Props {
     currentDocument: string;
     setCurrentDocument: Function;
+
+    setSource: Function;
 }
 
-export default function SignUpPage({ currentDocument, setCurrentDocument }: Props): JSX.Element {
+export default function SignUpPage({
+    currentDocument,
+    setCurrentDocument,
+    setSource,
+}: Props): JSX.Element {
     return (
         <StyledSignUpPage>
             <SignUpContainer>
@@ -58,6 +65,7 @@ export default function SignUpPage({ currentDocument, setCurrentDocument }: Prop
                 <SignUpForm
                     currentDocument={currentDocument}
                     setCurrentDocument={setCurrentDocument}
+                    setSource={setSource}
                 />
                 <Paragraph>
                     Have an account?
@@ -109,7 +117,7 @@ const ErrorText = styled.p`
     color: red;
 `;
 
-function SignUpForm({ currentDocument, setCurrentDocument }: Props): JSX.Element {
+function SignUpForm({ currentDocument, setCurrentDocument, setSource }: Props): JSX.Element {
     const [showUsernameError, setShowUsernameError] = useState(false);
     const [showPasswordError, setShowPasswordError] = useState(false);
 
@@ -144,6 +152,9 @@ function SignUpForm({ currentDocument, setCurrentDocument }: Props): JSX.Element
                 let response = await UserService.signup(user, getDate(new Date()));
                 if (response.data.isAuth) {
                     auth.login(user.username, () => navigate("/"));
+                    // get docoment after successfully signin up
+                    let response = await DocumentService.GetSelectedDocument("welcome", auth.user);
+                    setSource(response.data.document.document_body);
                     setCurrentDocument("welcome.md");
                 }
             } catch (error) {

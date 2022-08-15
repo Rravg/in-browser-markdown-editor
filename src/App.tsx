@@ -78,6 +78,7 @@ function App() {
                                 <SignUpPage
                                     currentDocument={currentDocument}
                                     setCurrentDocument={setCurrentDocument}
+                                    setSource={setSource}
                                 />
                             }
                         />

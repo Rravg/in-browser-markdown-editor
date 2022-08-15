@@ -7,8 +7,7 @@ import { useAuth } from "./AuthProvider";
 import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import DocumentService from "../services/DocumentService";
-import { useEffect, useState } from "react";
-import { useIsFirstRender } from "usehooks-ts";
+import { useEffect } from "react";
 
 const StyledSideNav = styled.div`
     height: 100%;
@@ -102,8 +101,6 @@ export default function SideNav({
     let auth = useAuth();
     let navigate = useNavigate();
 
-    const isFirst = useIsFirstRender();
-
     function getDate(now: Date): string {
         let date: string = "";
         const year = now.getFullYear();
@@ -118,23 +115,15 @@ export default function SideNav({
     }
 
     const setNewDocument = async () => {
-        console.log(isFirst);
-        if (!isFirst) {
-            setCurrentDocument(() => {
-                let name = data[data.length - 1].document_name;
-                return name;
-            });
-        }
+        console.log(data);
+        setCurrentDocument(() => {
+            return data[data.length - 1].document_name;
+        });
     };
-
-    useEffect(() => {
-        setNewDocument();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
 
     const getDocuments = async () => {
         let response = await DocumentService.GetDocuments(auth.user);
-        setData((docs: document) => {
+        await setData(() => {
             return response.data.documents;
         });
     };
@@ -149,6 +138,7 @@ export default function SideNav({
     const handleNewDocument = async () => {
         await DocumentService.CreateDocument(getDate(new Date()), auth.user);
         getDocuments();
+        setNewDocument();
     };
 
     const handleLogout = async () => {
