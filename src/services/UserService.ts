@@ -6,14 +6,23 @@ const SIGNUP_URL: string = "/signup";
 
 export default class UserService {
     public static login(user: User) {
-        return axios.post(LOGIN_URL, user);
+        return axios.post(
+            `http://ec2-54-146-132-56.compute-1.amazonaws.com:8000/api/v1/editor${LOGIN_URL}`,
+            user
+        );
     }
 
     public static logout() {
-        return axios.get(LOGOUT_URL);
+        return axios.get(
+            `http://ec2-54-146-132-56.compute-1.amazonaws.com:8000/api/v1/editor${LOGOUT_URL}`
+        );
     }
 
     public static signup(user: User, date: string) {
-        return axios.post(SIGNUP_URL, user, { params: { date: date } });
+        return axios.post(
+            `http://ec2-54-146-132-56.compute-1.amazonaws.com:8000/api/v1/editor${SIGNUP_URL}`,
+            user,
+            { params: { date: date } }
+        );
     }
 }
