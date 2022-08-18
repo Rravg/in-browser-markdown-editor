@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import DocumentService from "../services/DocumentService";
 import { useEffect } from "react";
+import moment from "moment";
 
 const StyledSideNav = styled.div`
     height: 100%;
@@ -101,19 +102,6 @@ export default function SideNav({
     let auth = useAuth();
     let navigate = useNavigate();
 
-    function getDate(now: Date): string {
-        let date: string = "";
-        const year = now.getFullYear();
-        let day = now.getDay().toString();
-        if (day.length === 1) day = "0".concat(day);
-
-        let month = now.toLocaleString("default", { month: "long" });
-        month = month.charAt(0).toUpperCase() + month.slice(1);
-
-        date = `${day} ${month} ${year}`;
-        return date;
-    }
-
     const setNewDocument = async () => {
         console.log(data);
         setCurrentDocument(() => {
@@ -136,7 +124,7 @@ export default function SideNav({
     }, [auth.user]);
 
     const handleNewDocument = async () => {
-        await DocumentService.CreateDocument(getDate(new Date()), auth.user);
+        await DocumentService.CreateDocument(moment().format("D MMMM YYYY"), auth.user);
         getDocuments();
         setNewDocument();
     };
