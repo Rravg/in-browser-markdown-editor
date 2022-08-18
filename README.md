@@ -39,7 +39,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [Click Here](https://www.frontendmentor.io/solutions/fullstack-online-markdown-editor-with-typescript-react-0PzPFpHvGC)
-- Live Site URL: [Click Here](https://browser-markdown-editor.netlify.app/login)
+- Live Site URL: [Click Here](https://browser-markdown-editor.netlify.app/)
 
 ## My process
 
