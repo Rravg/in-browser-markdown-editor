@@ -5,18 +5,21 @@ const CREATE_DOCUMENT_URL: string = "/create";
 const DELETE_DOCUMENT_URL: string = "/delete";
 const GET_SELECTED_DOCUMENT_URL: string = "/document";
 const SAVE_DOCUMENT_URL: string = "/save";
+const URL_STRING = "https://markdown-editor-backend.up.railway.app";
 
 export default class DocumentService {
+
+
     public static GetDocuments(user: string) {
         return axios.get(
-            `https://online-markdown-editor-api.herokuapp.com/api/v1/editor${GET_DOCUMENTS_URL}`,
+            `${URL_STRING}/api/v1/editor${GET_DOCUMENTS_URL}`,
             { params: { user: user } }
         );
     }
 
     public static CreateDocument(date: string, user: string) {
         return axios.post(
-            `https://online-markdown-editor-api.herokuapp.com/api/v1/editor${CREATE_DOCUMENT_URL}`,
+            `${URL_STRING}/api/v1/editor${CREATE_DOCUMENT_URL}`,
             { date: date },
             { params: { user: user } }
         );
@@ -24,7 +27,7 @@ export default class DocumentService {
 
     public static DeleteDocument(document: string, user: string) {
         return axios.delete(
-            `https://online-markdown-editor-api.herokuapp.com/api/v1/editor${DELETE_DOCUMENT_URL}`,
+            `${URL_STRING}/api/v1/editor${DELETE_DOCUMENT_URL}`,
             {
                 params: {
                     document_name: document,
@@ -36,7 +39,7 @@ export default class DocumentService {
 
     public static GetSelectedDocument(document: string, user: string) {
         return axios.get(
-            `https://online-markdown-editor-api.herokuapp.com/api/v1/editor${GET_SELECTED_DOCUMENT_URL}`,
+            `${URL_STRING}/api/v1/editor${GET_SELECTED_DOCUMENT_URL}`,
             {
                 params: {
                     document_name: document,
@@ -48,7 +51,7 @@ export default class DocumentService {
 
     public static SaveDocument(new_name: string, old_name: string, source: string, user: string) {
         return axios.put(
-            `https://online-markdown-editor-api.herokuapp.com/api/v1/editor${SAVE_DOCUMENT_URL}`,
+            `${URL_STRING}/api/v1/editor${SAVE_DOCUMENT_URL}`,
             { source: source },
             {
                 params: {
