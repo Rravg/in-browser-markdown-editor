@@ -38,8 +38,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Click Here]()
-- Live Site URL: [Click Here](https://in-browser-markdown-editor.herokuapp.com/)
+- Solution URL: [Click Here](https://www.frontendmentor.io/solutions/fullstack-online-markdown-editor-with-typescript-react-0PzPFpHvGC)
+- Live Site URL: [Click Here](https://browser-markdown-editor.netlify.app/)
 
 ## My process
 
